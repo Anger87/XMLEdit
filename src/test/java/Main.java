@@ -2,9 +2,9 @@ public class Main {
 
     public static void main(String... args) {
 //        System.out.println(Parser.parse("Book1.xls"));
-        System.out.println("1000011 Тексапон EHS 220кг".contains("фарба"));
-//        System.out.println("1000011 Тексапон EHS 220кг".trim().toLowerCase().contains("фарба".trim().toLowerCase()));
-//        System.out.println("1000011 Тексапон EHS 220кг".trim().toLowerCase(Locale.ROOT).contains("фарба".trim().toLowerCase(Locale.ROOT)));
+        System.out.println("1000011 РўРµРєСЃР°РїРѕРЅ EHS 220пїЅпїЅ".contains("пїЅпїЅпїЅпїЅпїЅ"));
+//        System.out.println("1000011 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ EHS 220пїЅпїЅ".trim().toLowerCase().contains("пїЅпїЅпїЅпїЅпїЅ".trim().toLowerCase()));
+//        System.out.println("1000011 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ EHS 220пїЅпїЅ".trim().toLowerCase(Locale.ROOT).contains("пїЅпїЅпїЅпїЅпїЅ".trim().toLowerCase(Locale.ROOT)));
 
 
     }
