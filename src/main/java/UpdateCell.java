@@ -14,6 +14,7 @@ public class UpdateCell {
         String result = "";
         FileInputStream in = null;
 
+
         try {
             in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/Book1.xls");
             Workbook workbook = WorkbookFactory.create(in);
@@ -21,27 +22,53 @@ public class UpdateCell {
             Iterator<Row> it = sheet.iterator();
             while (it.hasNext()) {
                 Row row = it.next();
-                if (row.getRowNum() >= 7) {
+                int rowNum = row.getRowNum();
+                //Set row number for formula
+                int rowS = rowNum + 1;
+                if (rowNum >= 7) {
                     Iterator<Cell> cells = row.iterator();
                     Cell cell = cells.next();
-                    String cellValue = cell.getStringCellValue();
+                    String name = cell.getStringCellValue();
                     String importFlag = row.getCell(1).getStringCellValue();
-                    System.out.println(cellValue);
-//                    Фарба
-                    if (cellValue.contains("Фарба") || cellValue.contains("Краска") || cellValue.contains("Лак") || cellValue.contains("грунт") || cellValue.contains("Морілка")) {
-                        System.out.println("Farba " + row.getRowNum());
-                        if (importFlag.contains("Импортированный товар")) {
-                            row.getCell(10).setCellValue("+");
-                        }
-//                    Інші
-                    } else if (cellValue.contains("Балон") || cellValue.contains("Диск") || cellValue.contains("Стрічка") || cellValue.contains("Пензлі") || cellValue.contains("Частини") || cellValue.contains("Пензлі")) {
-                        System.out.println("Others " + row.getRowNum());
-//                    Хімія
-                    } else if (cellValue.contains("Тексапон") || cellValue.contains("Деріфат") || cellValue.contains("Дехікварт") || cellValue.contains("Трезаліт") || cellValue.contains("Розчинник") || cellValue.contains("Ларопал") || cellValue.contains("Глюкопон") || cellValue.contains("Трезоліт") || cellValue.contains("Шпаклівка") || cellValue.contains("ацетат") || cellValue.contains("Дехітон") || cellValue.contains("Тінувін") || cellValue.contains("Трилон") || cellValue.contains("Лютенсол")) {
-                        System.out.println("Chemia " + row.getRowNum());
-                    } else if (cellValue.length() > 1) {
-                        result += cell.getStringCellValue() + " Row number: " + row.getRowNum() + "\n";
+                    double sum = 0;
+                    sum = row.getCell(4).getNumericCellValue();
 
+                    if (name.length() > 0 && sum > 0) {
+                        System.out.println(name + " / " + sum);
+//                    Фарба
+                        if (name.contains("Фарба") || name.contains("Краска") || name.contains("Лак") || name.contains("грунт") || name.contains("Морілка")) {
+                            System.out.println("Farba " + rowNum);
+                            if (importFlag.contains("Импортированный товар")) {
+                                row.createCell(15).setCellValue("+");
+
+                            }
+
+//                    Інші
+                        } else if (name.contains("Балон") || name.contains("Диск") || name.contains("Стрічка") || name.contains("Пензлі") || name.contains("Частини") || name.contains("Пензлі")) {
+                            System.out.println("Others " + rowNum);
+                            if (importFlag.contains("Импортированный товар")) {
+                                row.createCell(19).setCellValue("+");
+                                row.createCell(20).setCellFormula("J" +rowS);
+                            } else {
+                                row.createCell(27).setCellValue("+");
+                                row.createCell(28).setCellFormula("J" +rowS);
+                            }
+
+//                    Хімія
+                        } else if (name.contains("Тексапон") || name.contains("Деріфат") || name.contains("Дехікварт") || name.contains("Трезаліт") || name.contains("Розчинник") || name.contains("Ларопал") || name.contains("Глюкопон") || name.contains("Трезоліт") || name.contains("Шпаклівка") || name.contains("ацетат") || name.contains("Дехітон") || name.contains("Тінувін") || name.contains("Трилон") || name.contains("Лютенсол") || name.contains("Отверджувач") || name.contains("Антигравій")) {
+                            System.out.println("Chemia " + rowNum);
+                            if (importFlag.contains("Импортированный товар")) {
+                                row.createCell(21).setCellValue("+");
+                                row.createCell(22).setCellFormula("J" +rowS);
+                            } else {
+                                row.createCell(29).setCellValue("+");
+                                row.createCell(30).setCellFormula("J" +rowS);
+                            }
+
+                        } else if (name.length() > 1) {
+                            result += name + " Row number: " + row.getRowNum() + 1 + "\n";
+
+                        }
                     }
                 }
             }
