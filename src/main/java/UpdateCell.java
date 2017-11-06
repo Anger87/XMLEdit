@@ -1,13 +1,10 @@
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.Locale;
 
 public class UpdateCell {
 
@@ -46,13 +43,18 @@ public class UpdateCell {
                     sum = row.getCell(4).getNumericCellValue();
 
                     if (name.length() > 0 && sum > 0) {
-//                        System.out.println(name + " / " + sum);
+                        System.out.println(name + " / " + sum);
 //                    Фарба
                         if (name.contains("Фарба") || name.contains("Краска") || name.contains("Лак") || name.contains("грунт") || name.contains("Морілка")) {
                             System.out.println(name + " | rowNum: " + rowNum + " | PaintCount: " + getPaintCount(name));
                             if (importFlag.contains("Импортированный товар")) {
                                 row.createCell(15).setCellValue("+");
                                 row.createCell(16).setCellFormula("J" + rowS);
+                                int rowQ = rowS + 1;
+                                row.createCell(17).setCellFormula("J" + rowQ + "*" + getPaintCount(name));
+                                row.createCell(18).setCellFormula("R" + rowS + "/100");
+                            } else {
+
                             }
 
 //                    Інші
