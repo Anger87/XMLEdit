@@ -1,3 +1,5 @@
+package ExelLogic;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
@@ -59,8 +61,6 @@ public class UpdateCell {
         String result = "";
         FileInputStream in = null;
         double sum;
-//        getPaintCount("327261 Фарба Пластик сіра  400мл");
-
         try {
 //            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/Book1.xls");
             in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/1-опт-остатки-3-кв.2017-281289.xls");

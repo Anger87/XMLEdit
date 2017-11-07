@@ -1,3 +1,5 @@
+package ExelLogic;
+
 public class Test {
     public static void main(String[] args) {
         String name = "85-7821-1 Пензель для фарбування";
