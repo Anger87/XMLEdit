@@ -11,13 +11,13 @@ import java.util.Iterator;
 
 public class Parser {
 
-    public static String parse(String name) {
+    public static void main(String... args){
 
         String result = "";
         InputStream in = null;
         HSSFWorkbook wb = null;
         try {
-            in = new FileInputStream(name);
+            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/Book1.xls");
             wb = new HSSFWorkbook(in);
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,9 +48,10 @@ public class Parser {
                 }
             }
             result += "\n";
+//            result="";
         }
 
-        return result;
+        System.out.println(result);
     }
 
 }
