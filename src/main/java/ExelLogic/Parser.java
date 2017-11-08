@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class Parser {
 
-    public static void main(String... args){
+    public static void Parse(){
 
         String result = "";
         InputStream in = null;
@@ -49,7 +49,6 @@ public class Parser {
                 }
             }
             result += "\n";
-//            result="";
         }
 
         System.out.println(result);

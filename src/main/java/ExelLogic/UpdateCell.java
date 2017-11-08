@@ -1,8 +1,10 @@
 package ExelLogic;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -57,7 +59,7 @@ public class UpdateCell {
         return "";
     }
 
-    public static void main(String... args) throws IOException, InvalidFormatException {
+    public static void ScanDoc() throws IOException, InvalidFormatException {
         String result = "";
         FileInputStream in = null;
         double sum;
@@ -138,6 +140,9 @@ public class UpdateCell {
             workbook.write(outputStream);
             workbook.close();
             outputStream.close();
+
+            FileUtils.writeStringToFile(new File("notScaned.txt"), result);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
