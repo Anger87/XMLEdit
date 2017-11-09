@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class UpdateCell {
 
@@ -59,13 +60,49 @@ public class UpdateCell {
         return "";
     }
 
-    public static void ScanDoc() throws IOException, InvalidFormatException {
+    static boolean checkIfNameContains(String filename, String name) throws IOException {
+        String source = readFile(filename);
+        String[] splitedName = name.split("\\s+");
+        boolean isFound = false;
+        for (String i : splitedName) {
+            if (i.length() > 2 && source.indexOf(i) != -1) {
+                isFound = true;
+                break;
+            }
+        }
+        return isFound;
+    }
+
+
+    private static String readFile(String pathname) throws IOException {
+
+        File file = new File(pathname);
+        StringBuilder fileContents = new StringBuilder((int) file.length());
+        Scanner scanner = new Scanner(file);
+        String lineSeparator = System.getProperty("line.separator");
+
+        try {
+            while (scanner.hasNextLine()) {
+                fileContents.append(scanner.nextLine() + lineSeparator);
+            }
+            return fileContents.toString();
+        } finally {
+            scanner.close();
+        }
+    }
+
+        public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
+//    public static void main(String[] args) throws IOException, InvalidFormatException {
+
         String result = "";
         FileInputStream in = null;
+
+
         double sum;
         try {
+            in = new FileInputStream(filePath);
 //            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/Book1.xls");
-            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/1-опт-остатки-3-кв.2017-281289.xls");
+//            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/1-опт-остатки-3-кв.2017-281289.xls");
             Workbook workbook = WorkbookFactory.create(in);
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
@@ -77,15 +114,19 @@ public class UpdateCell {
                 if (rowNum >= 7) {
                     Iterator<Cell> cells = row.iterator();
                     Cell cell = cells.next();
-
                     String name = getNameCell(cell);
+
+//                    name="100170 Лак 2:1  1л";
+
+
                     if (!name.contains("Разом ")) {
                         sum = getSum(row);
                         if (name.length() > 1 && sum > 0) {
                             String importFlag = row.getCell(1).getStringCellValue();
 //                            System.out.println(name + " / " + sum);
 //                    Фарба
-                            if (name.contains("фарба ") ||name.contains("Фарба ") || name.contains("Краска ") || name.contains("лак ")|| name.contains("Лак ") || name.contains("Грунт")|| name.contains("грунт") || name.contains("Морілка ")) {
+//                            if (name.contains("силер") || name.contains("Фарба ") || name.contains("Краска ") || name.contains("лак ") || name.contains("Лак ") || name.contains("Грунт") || name.contains("грунт") || name.contains("Морілка ")) {
+                            if(checkIfNameContains("paint.txt", name)){
 //                                System.out.println(name + " | rowNum: " + rowNum + " | PaintCount: " + getPaintCount(name));
                                 String paintCount = getPaintCount(name);
                                 if (importFlag.contains("Импортированный товар")) {
@@ -105,8 +146,9 @@ public class UpdateCell {
                                 }
 
 //                    Інші
-                            } else if (name.contains("Балон") || name.contains("диск") || name.contains("Диск") || name.contains("Стрічка") || name.contains("Пензель ") || name.contains("Пензлі") || name.contains("Частини") || name.contains("Пензлі")) {
-//                            System.out.println("Others " + rowNum);
+//                            } else if (name.contains("сода") || name.contains("Диспергатор") || name.contains("Запашка") || name.contains("Каністра") || name.contains("Відро") || name.contains("Бочка") || name.contains("Балон") || name.contains("диск") || name.contains("Диск") || name.contains("Стрічка") || name.contains("Пензель ") || name.contains("Пензлі") || name.contains("Частини")) {
+                            } else if (checkIfNameContains("other.txt", name)) {
+//                                System.out.println("Others " + rowNum);
                                 if (importFlag.contains("Импортированный товар")) {
                                     row.createCell(19).setCellValue("+");
                                     row.createCell(20).setCellFormula("J" + rowS);
@@ -116,8 +158,9 @@ public class UpdateCell {
                                 }
 
 //                    Хімія
-                            } else if (name.contains("Тексапон") || name.contains("Деріфат") || name.contains("Дехікварт") || name.contains("Трезаліт") || name.contains("Розчинник") || name.contains("Ларопал") || name.contains("Глюкопон") || name.contains("Трезоліт") || name.contains("Шпаклівка") || name.contains("ацетат") || name.contains("Дехітон") || name.contains("Тінувін") || name.contains("Трилон") || name.contains("Лютенсол") || name.contains("Отверджувач") || name.contains("Антигравій")) {
-//                            System.out.println("Chemia " + rowNum);
+//                            } else if (name.contains("Затверджувач ") || name.contains("Цинк фосфорнокислий") || name.contains("Ксилол") || name.contains("озріджувач") || name.contains("Пігмент") || name.contains("отверджувач") || name.contains("тверждувач") || name.contains("Перл Мікс Ксералік") || name.contains("Металік Мікс Сільвер") || name.contains("Пігмент Транспарен") || name.contains("загущувач") || name.contains(" ефір") || name.contains("ропіленгліколь") || name.contains("оліроль") || name.contains("чищувач") || name.contains("Піна") || name.contains("піна") || name.contains("Клей") || name.contains("Тексапон") || name.contains("Деріфат") || name.contains("Дехікварт") || name.contains("Трезаліт") || name.contains("Розчинник") || name.contains("Ларопал") || name.contains("Глюкопон") || name.contains("Трезоліт") || name.contains("Шпаклівка") || name.contains("ацетат") || name.contains("Дехітон") || name.contains("Тінувін") || name.contains("Трилон") || name.contains("Лютенсол") || name.contains("Отверджувач") || name.contains("Антигравій")) {
+                            } else if (checkIfNameContains("chemia.txt", name)) {
+//                                System.out.println("Chemia " + rowNum);
                                 if (importFlag.contains("Импортированный товар")) {
                                     row.createCell(21).setCellValue("+");
                                     row.createCell(22).setCellFormula("J" + rowS);
@@ -127,7 +170,7 @@ public class UpdateCell {
                                 }
 
                             } else if (name.length() > 1) {
-                                result += name + " Row number: " + row.getRowNum() + 1 + "\n";
+                                result += name + "\n";
                             }
                         }
                     }
