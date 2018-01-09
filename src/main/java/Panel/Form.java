@@ -54,10 +54,11 @@ public class Form extends JFrame {
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if (filePath.length()>1) {
+                    if (filePath.length() > 1) {
+                        System.out.println("in startButton");
                         UpdateCell.ScanDoc(filePath);
                         JOptionPane.showMessageDialog(null, "File Scan Done");
-                    }else {
+                    } else {
                         JOptionPane.showMessageDialog(null, "Select the file");
                     }
                 } catch (IOException e1) {
@@ -70,9 +71,4 @@ public class Form extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-
-
-        new Form();
-    }
 }
