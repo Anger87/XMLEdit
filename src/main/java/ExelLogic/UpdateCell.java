@@ -91,78 +91,138 @@ public class UpdateCell {
         }
     }
 
-        public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
-//    public static void main(String[] args) throws IOException, InvalidFormatException {
-
+    //        public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
+    public static void main(String[] args) throws IOException, InvalidFormatException {
         String result = "";
         FileInputStream in = null;
         double sum;
         try {
-            in = new FileInputStream(filePath);
-//            in = new FileInputStream("d:\\Java\\XMLEdit\\Оборотка 281 4 квартал.xls");
+//            in = new FileInputStream(filePath);
+            Form.fileName = "Продажи 4 кв.xls";
+            in = new FileInputStream(Form.fileName);
 //            in = new FileInputStream("d:\\Java\\XMLEdit\\JavaBooks.xls");
-
             Workbook workbook = WorkbookFactory.create(in);
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
             while (it.hasNext()) {
                 Row row = it.next();
                 int rowNum = row.getRowNum();
-                //Set row number for formula
                 int rowS = rowNum + 1;
-                if (rowNum >= 7) {
-                    Iterator<Cell> cells = row.iterator();
-                    Cell cell = cells.next();
-                    String name = getNameCell(cell);
-                    if (!name.contains("Разом ")) {
-                        sum = getSum(row);
-                        if (name.length() > 1 && sum > 0) {
-                            String importFlag = row.getCell(1).getStringCellValue();
+                Iterator<Cell> cells = row.iterator();
+
+                if (Form.fileName.contains("родаж")) {
+                    if (rowNum >= 14) {
+                        Cell cell = cells.next();
+                        String name = getNameCell(cell);
+                        if (!name.contains("Підсумок")) {
+                            sum = getSum(row);
+                            if (name.length() > 1 && sum > 0) {
+                                String importFlag = row.getCell(1).getStringCellValue();
 //                            System.out.println(name + " / " + sum);
 //                    Фарба
-                            if (checkIfNameContains("paint.txt", name)) {
+                                if (checkIfNameContains("paint.txt", name)) {
 //                                System.out.println(name + " | rowNum: " + rowNum + " | PaintCount: " + getPaintCount(name));
-                                String paintCount = getPaintCount(name);
-                                if (importFlag.contains("Импортированный товар")) {
-                                    row.createCell(15).setCellValue("+");
-                                    row.createCell(16).setCellFormula("J" + rowS);
-                                    int rowQ = rowS + 1;
-                                    if (paintCount.length() > 0)
-                                        row.createCell(17).setCellFormula("J" + rowQ + "*" + paintCount);
-                                    row.createCell(18).setCellFormula("R" + rowS + "/100");
-                                } else {
-                                    row.createCell(23).setCellValue("+");
-                                    row.createCell(24).setCellFormula("J" + rowS);
-                                    int rowQ = rowS + 1;
-                                    if (paintCount.length() > 0)
-                                        row.createCell(25).setCellFormula("J" + rowQ + "*" + paintCount);
-                                    row.createCell(26).setCellFormula("Z" + rowS + "/100");
-                                }
+                                    String paintCount = getPaintCount(name);
+                                    if (importFlag.contains("Импортированный товар")) {
+                                        row.createCell(15).setCellValue("+");
+                                        row.createCell(16).setCellFormula("J" + rowS);
+                                        int rowQ = rowS + 1;
+                                        if (paintCount.length() > 0)
+                                            row.createCell(17).setCellFormula("J" + rowQ + "*" + paintCount);
+                                        row.createCell(18).setCellFormula("R" + rowS + "/100");
+                                    } else {
+                                        row.createCell(23).setCellValue("+");
+                                        row.createCell(24).setCellFormula("J" + rowS);
+                                        int rowQ = rowS + 1;
+                                        if (paintCount.length() > 0)
+                                            row.createCell(25).setCellFormula("J" + rowQ + "*" + paintCount);
+                                        row.createCell(26).setCellFormula("Z" + rowS + "/100");
+                                    }
 
 //                    Інші
-                            } else if (checkIfNameContains("other.txt", name)) {
+                                } else if (checkIfNameContains("other.txt", name)) {
 //                                System.out.println("Others " + rowNum);
-                                if (importFlag.contains("Импортированный товар")) {
-                                    row.createCell(19).setCellValue("+");
-                                    row.createCell(20).setCellFormula("J" + rowS);
-                                } else {
-                                    row.createCell(27).setCellValue("+");
-                                    row.createCell(28).setCellFormula("J" + rowS);
-                                }
+                                    if (importFlag.contains("Импортированный товар")) {
+                                        row.createCell(19).setCellValue("+");
+                                        row.createCell(20).setCellFormula("J" + rowS);
+                                    } else {
+                                        row.createCell(27).setCellValue("+");
+                                        row.createCell(28).setCellFormula("J" + rowS);
+                                    }
 
 //                    Хімія
-                            } else if (checkIfNameContains("chemia.txt", name)) {
+                                } else if (checkIfNameContains("chemia.txt", name)) {
 //                                System.out.println("Chemia " + rowNum);
-                                if (importFlag.contains("Импортированный товар")) {
-                                    row.createCell(21).setCellValue("+");
-                                    row.createCell(22).setCellFormula("J" + rowS);
-                                } else {
-                                    row.createCell(29).setCellValue("+");
-                                    row.createCell(30).setCellFormula("J" + rowS);
-                                }
+                                    if (importFlag.contains("Импортированный товар")) {
+                                        row.createCell(21).setCellValue("+");
+                                        row.createCell(22).setCellFormula("J" + rowS);
+                                    } else {
+                                        row.createCell(29).setCellValue("+");
+                                        row.createCell(30).setCellFormula("J" + rowS);
+                                    }
 
-                            } else if (name.length() > 1) {
-                                result += name + "\n";
+                                } else if (name.length() > 1) {
+                                    result += name + "\n";
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    //Logic for Oborotky
+                    if (rowNum >= 7) {
+                        //Set row number for formula
+                        Cell cell = cells.next();
+                        String name = getNameCell(cell);
+                        if (!name.contains("Разом ")) {
+                            sum = getSum(row);
+                            if (name.length() > 1 && sum > 0) {
+                                String importFlag = row.getCell(1).getStringCellValue();
+//                            System.out.println(name + " / " + sum);
+//                    Фарба
+                                if (checkIfNameContains("paint.txt", name)) {
+//                                System.out.println(name + " | rowNum: " + rowNum + " | PaintCount: " + getPaintCount(name));
+                                    String paintCount = getPaintCount(name);
+                                    if (importFlag.contains("Импортированный товар")) {
+                                        row.createCell(15).setCellValue("+");
+                                        row.createCell(16).setCellFormula("J" + rowS);
+                                        int rowQ = rowS + 1;
+                                        if (paintCount.length() > 0)
+                                            row.createCell(17).setCellFormula("J" + rowQ + "*" + paintCount);
+                                        row.createCell(18).setCellFormula("R" + rowS + "/100");
+                                    } else {
+                                        row.createCell(23).setCellValue("+");
+                                        row.createCell(24).setCellFormula("J" + rowS);
+                                        int rowQ = rowS + 1;
+                                        if (paintCount.length() > 0)
+                                            row.createCell(25).setCellFormula("J" + rowQ + "*" + paintCount);
+                                        row.createCell(26).setCellFormula("Z" + rowS + "/100");
+                                    }
+
+//                    Інші
+                                } else if (checkIfNameContains("other.txt", name)) {
+//                                System.out.println("Others " + rowNum);
+                                    if (importFlag.contains("Импортированный товар")) {
+                                        row.createCell(19).setCellValue("+");
+                                        row.createCell(20).setCellFormula("J" + rowS);
+                                    } else {
+                                        row.createCell(27).setCellValue("+");
+                                        row.createCell(28).setCellFormula("J" + rowS);
+                                    }
+
+//                    Хімія
+                                } else if (checkIfNameContains("chemia.txt", name)) {
+//                                System.out.println("Chemia " + rowNum);
+                                    if (importFlag.contains("Импортированный товар")) {
+                                        row.createCell(21).setCellValue("+");
+                                        row.createCell(22).setCellFormula("J" + rowS);
+                                    } else {
+                                        row.createCell(29).setCellValue("+");
+                                        row.createCell(30).setCellFormula("J" + rowS);
+                                    }
+
+                                } else if (name.length() > 1) {
+                                    result += name + "\n";
+                                }
                             }
                         }
                     }
@@ -181,6 +241,10 @@ public class UpdateCell {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    static void scanProdagy(Row row) {
+
     }
 
 }
