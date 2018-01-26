@@ -16,7 +16,6 @@ public class Form extends JFrame {
     private JFrame f;
     int i = 0, num = 0;
     String filePath = "";
-    public static String fileName;
 
     public Form() {
 
@@ -46,8 +45,7 @@ public class Form extends JFrame {
                 int ret = fileopen.showDialog(null, "Open the file");
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     File file = fileopen.getSelectedFile();
-                    fileName=file.getName();
-                    label.setText(fileName);
+                    label.setText(file.getName());
                     filePath = file.getAbsolutePath();
                 }
             }

@@ -91,17 +91,17 @@ public class UpdateCell {
         }
     }
 
-    public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
+        public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
 //    public static void main(String[] args) throws IOException, InvalidFormatException {
 
         String result = "";
         FileInputStream in = null;
-
         double sum;
         try {
             in = new FileInputStream(filePath);
-//            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/Book1.xls");
-//            in = new FileInputStream("/home/test/IdeaProjects/XMLEdit/XMLEdit/1-опт-остатки-3-кв.2017-281289.xls");
+//            in = new FileInputStream("d:\\Java\\XMLEdit\\Оборотка 281 4 квартал.xls");
+//            in = new FileInputStream("d:\\Java\\XMLEdit\\JavaBooks.xls");
+
             Workbook workbook = WorkbookFactory.create(in);
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
@@ -169,7 +169,7 @@ public class UpdateCell {
                 }
             }
 
-            System.out.println("not worked rows: " + "\n" + result);
+//            System.out.println("not worked rows: " + "\n" + result);
             in.close();
             FileOutputStream outputStream = new FileOutputStream(Form.fileName + "_Output.xls");
             workbook.write(outputStream);

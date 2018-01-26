@@ -7,6 +7,7 @@
     <groupId>XMLTest</groupId>
     <artifactId>testEditDataXML</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
