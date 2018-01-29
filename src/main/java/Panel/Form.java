@@ -52,7 +52,7 @@ public class Form extends JFrame {
                 }
             }
         });
-/*
+
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -70,7 +70,7 @@ public class Form extends JFrame {
                 }
 
             }
-        });*/
+        });
 
 
     }

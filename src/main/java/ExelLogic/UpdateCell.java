@@ -29,11 +29,23 @@ public class UpdateCell {
                     double liters = Integer.parseInt(result);
                     result = String.valueOf(liters / 1000);
                     return result;
+                    // Coma case
+                } else if (splited[i].matches("\\d*" + "L,") || splited[i].matches("\\d*" + "кг,") || splited[i].matches("\\d*" + "л,") || splited[i].matches("\\d*" + "," + "\\d*" + "л,") || splited[i].matches("\\d*" + "," + "\\d*" + "кг,")) {
+                    result = splited[i].substring(0, splited[i].length() - 1);
+                    result = result.replaceAll("л|кг|L", "");
+                    return result.replaceAll(",", ".");
+                } else if (splited[i].matches("\\d*" + "мл,")) {
+                    result = splited[i].substring(0, splited[i].length() - 1);
+                    result = result.replaceAll("мл", "").replaceAll(",", ".");
+                    double liters = Integer.parseInt(result);
+                    result = String.valueOf(liters / 1000);
+                    return result;
                 }
             }
         }
         return "";
     }
+
 
     static double getSum(Row row) {
         try {
@@ -91,16 +103,16 @@ public class UpdateCell {
         }
     }
 
-    //        public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
-    public static void main(String[] args) throws IOException, InvalidFormatException {
+    public static void ScanDoc(String filePath) throws IOException, InvalidFormatException {
+//    public static void main(String[] args) throws IOException, InvalidFormatException {
         String result = "";
         FileInputStream in = null;
         double sum;
+        Boolean importFlagProdaj = false;
         try {
-//            in = new FileInputStream(filePath);
-            Form.fileName = "Продажи 4 кв.xls";
-            in = new FileInputStream(Form.fileName);
-//            in = new FileInputStream("d:\\Java\\XMLEdit\\JavaBooks.xls");
+            in = new FileInputStream(filePath);
+//            Form.fileName = "Продажи 4 кв New.xls";
+//            in = new FileInputStream(Form.fileName);
             Workbook workbook = WorkbookFactory.create(in);
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> it = sheet.iterator();
@@ -109,56 +121,54 @@ public class UpdateCell {
                 int rowNum = row.getRowNum();
                 int rowS = rowNum + 1;
                 Iterator<Cell> cells = row.iterator();
-
+                // Logic for Prodaj
                 if (Form.fileName.contains("родаж")) {
-                    if (rowNum >= 14) {
+                    if (rowNum >= 12) {
                         Cell cell = cells.next();
                         String name = getNameCell(cell);
                         if (!name.contains("Підсумок")) {
-                            sum = getSum(row);
+                            importFlagProdaj = getImportFlag(name);
+                            sum = getSumProd(row);
                             if (name.length() > 1 && sum > 0) {
-                                String importFlag = row.getCell(1).getStringCellValue();
-//                            System.out.println(name + " / " + sum);
 //                    Фарба
                                 if (checkIfNameContains("paint.txt", name)) {
 //                                System.out.println(name + " | rowNum: " + rowNum + " | PaintCount: " + getPaintCount(name));
                                     String paintCount = getPaintCount(name);
-                                    if (importFlag.contains("Импортированный товар")) {
-                                        row.createCell(15).setCellValue("+");
-                                        row.createCell(16).setCellFormula("J" + rowS);
-                                        int rowQ = rowS + 1;
+                                    // Import paint
+                                    if (importFlagProdaj) {
+                                        row.createCell(6).setCellValue("+");
+                                        row.createCell(7).setCellFormula("F" + rowS);
                                         if (paintCount.length() > 0)
-                                            row.createCell(17).setCellFormula("J" + rowQ + "*" + paintCount);
-                                        row.createCell(18).setCellFormula("R" + rowS + "/100");
+                                            row.createCell(8).setCellFormula("D" + rowS + "*" + paintCount);
+                                        row.createCell(9).setCellFormula("I" + rowS + "/100");
                                     } else {
-                                        row.createCell(23).setCellValue("+");
-                                        row.createCell(24).setCellFormula("J" + rowS);
-                                        int rowQ = rowS + 1;
+                                        row.createCell(14).setCellValue("+");
+                                        row.createCell(15).setCellFormula("F" + rowS);
                                         if (paintCount.length() > 0)
-                                            row.createCell(25).setCellFormula("J" + rowQ + "*" + paintCount);
-                                        row.createCell(26).setCellFormula("Z" + rowS + "/100");
+                                            row.createCell(16).setCellFormula("D" + rowS + "*" + paintCount);
+                                        row.createCell(17).setCellFormula("Q" + rowS + "/100");
                                     }
 
 //                    Інші
                                 } else if (checkIfNameContains("other.txt", name)) {
 //                                System.out.println("Others " + rowNum);
-                                    if (importFlag.contains("Импортированный товар")) {
-                                        row.createCell(19).setCellValue("+");
-                                        row.createCell(20).setCellFormula("J" + rowS);
+                                    if (importFlagProdaj) {
+                                        row.createCell(10).setCellValue("+");
+                                        row.createCell(11).setCellFormula("F" + rowS);
                                     } else {
-                                        row.createCell(27).setCellValue("+");
-                                        row.createCell(28).setCellFormula("J" + rowS);
+                                        row.createCell(18).setCellValue("+");
+                                        row.createCell(19).setCellFormula("F" + rowS);
                                     }
 
 //                    Хімія
                                 } else if (checkIfNameContains("chemia.txt", name)) {
 //                                System.out.println("Chemia " + rowNum);
-                                    if (importFlag.contains("Импортированный товар")) {
-                                        row.createCell(21).setCellValue("+");
-                                        row.createCell(22).setCellFormula("J" + rowS);
+                                    if (importFlagProdaj) {
+                                        row.createCell(12).setCellValue("+");
+                                        row.createCell(13).setCellFormula("F" + rowS);
                                     } else {
-                                        row.createCell(29).setCellValue("+");
-                                        row.createCell(30).setCellFormula("J" + rowS);
+                                        row.createCell(20).setCellValue("+");
+                                        row.createCell(21).setCellFormula("F" + rowS);
                                     }
 
                                 } else if (name.length() > 1) {
@@ -229,7 +239,7 @@ public class UpdateCell {
                 }
             }
 
-//            System.out.println("not worked rows: " + "\n" + result);
+            System.out.println("not worked rows: " + "\n" + result);
             in.close();
             FileOutputStream outputStream = new FileOutputStream(Form.fileName + "_Output.xls");
             workbook.write(outputStream);
@@ -242,6 +252,26 @@ public class UpdateCell {
             e.printStackTrace();
         }
     }
+
+    private static Boolean getImportFlag(String name) {
+        if (name.equals("Импортированный товар")) {
+            return true;
+        }
+        return false;
+    }
+
+    private static double getSumProd(Row row) {
+        try {
+            int cellType = row.getCell(5).getCellType();
+            if (cellType == Cell.CELL_TYPE_FORMULA) {
+                return row.getCell(5).getNumericCellValue();
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Sum not found at RowNum: " + row.getRowNum());
+        }
+        return 0;
+    }
+
 
     static void scanProdagy(Row row) {
 
