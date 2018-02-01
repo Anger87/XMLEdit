@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 public class UpdateCell {
+    static Boolean importFlagProdaj;
 
     static String getPaintCount(String name) {
         if (!name.contains("Водорозчинний грунт лак")) {
@@ -108,7 +109,6 @@ public class UpdateCell {
         String result = "";
         FileInputStream in = null;
         double sum;
-        Boolean importFlagProdaj = false;
         try {
             in = new FileInputStream(filePath);
 //            Form.fileName = "Продажи 4 кв New.xls";
@@ -127,7 +127,7 @@ public class UpdateCell {
                         Cell cell = cells.next();
                         String name = getNameCell(cell);
                         if (!name.contains("Підсумок")) {
-                            importFlagProdaj = getImportFlag(name);
+                            setImportFlag(name);
                             sum = getSumProd(row);
                             if (name.length() > 1 && sum > 0) {
 //                    Фарба
@@ -253,11 +253,12 @@ public class UpdateCell {
         }
     }
 
-    private static Boolean getImportFlag(String name) {
+    private static void setImportFlag(String name) {
         if (name.equals("Импортированный товар")) {
-            return true;
+            importFlagProdaj = true;
+        } else if (name.equals("Товар")) {
+            importFlagProdaj = false;
         }
-        return false;
     }
 
     private static double getSumProd(Row row) {
@@ -270,11 +271,6 @@ public class UpdateCell {
             System.out.println("Sum not found at RowNum: " + row.getRowNum());
         }
         return 0;
-    }
-
-
-    static void scanProdagy(Row row) {
-
     }
 
 }
